@@ -27,11 +27,11 @@ public class ORCA {
     }
     
     public ORCA(String address, int port){
-        setAddress(address);
-        setPort(port);
+        this.address.set(address);
+        this.port.set(port);
     }
     
-    public Service<Void> startNewOrcaListener(){
+    public Service<Void> getNewOrcaClient(){
         return new ORCAService(this);
     }
 

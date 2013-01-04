@@ -25,11 +25,13 @@ public class ORCATask extends Task<Void> {
         this.orca = orca;
         this.address = address;
         this.port = port;
+        updateMessage("Client created for ORCA width address " + address + ":" + port + "\n");
     }
 
     @Override
     protected Void call() throws Exception {
         setupClient();
+        updateMessage("Running client loop...\n");
         while (!isCancelled()) {
             checkORCA();
         }
@@ -39,10 +41,13 @@ public class ORCATask extends Task<Void> {
 
     private void setupClient() {
         try {
+            updateMessage("Attempting to connected at " + address + ":" + port + "...");
             socket = new Socket(address, port);
-            updateMessage("Connected at " + address);
+            updateMessage("done\n");
+            updateMessage("Attempting to create IO streams...");
             clientInputStream = socket.getInputStream();
             clientOutputStream = socket.getOutputStream();
+            updateMessage("done\n");
         } catch (UnknownHostException ex) {
             updateMessage(ex.getMessage());
         } catch (IOException ex) {
@@ -104,11 +109,13 @@ public class ORCATask extends Task<Void> {
 
     private void disconnect() {
         try {
+            updateMessage("Shutting down...");
             socket.shutdownInput();
             socket.shutdownOutput();
             clientInputStream.close();
             clientOutputStream.close();
             socket.close();
+            updateMessage("done\n");
         } catch (IOException ex) {
             updateMessage(ex.getMessage());
         }
